@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hype_man/components/about_dialog_button.dart';
 import 'package:hype_man/components/exercise_panel.dart';
+import 'package:hype_man/models/workout.dart';
+import 'package:hype_man/models/workout_set.dart';
 
 class WorkoutPage extends StatefulWidget {
 
@@ -30,9 +32,27 @@ class _WorkoutPageState extends State<WorkoutPage> {
             Text(
               'Workout Id: $id',
             ),
-            const ExercisePanel(setName: 'Squat', repCount: 5, setCount: 5, setWeight: 305),
-            const ExercisePanel(setName: 'Bench Press', repCount: 5, setCount: 4, setWeight: 225),
-            const ExercisePanel(setName: 'Barbell Row', repCount: 5, setCount: 5, setWeight: 195),
+            ExercisePanel(workout: Workout(id: 1, name: 'Squat', sets: [
+              WorkoutSet(id: 1, targetReps: 5, actualReps: 0, weight: 100),
+              WorkoutSet(id: 2, targetReps: 5, actualReps: 0, weight: 125),
+              WorkoutSet(id: 3, targetReps: 5, actualReps: 0, weight: 150),
+              WorkoutSet(id: 4, targetReps: 5, actualReps: 0, weight: 175),
+              WorkoutSet(id: 5, targetReps: 5, actualReps: 0, weight: 200),
+            ])),
+            ExercisePanel(workout: Workout(id: 1, name: 'Bench', sets: [
+              WorkoutSet(id: 1, targetReps: 5, actualReps: 0, weight: 100),
+              WorkoutSet(id: 2, targetReps: 5, actualReps: 0, weight: 125),
+              WorkoutSet(id: 3, targetReps: 5, actualReps: 0, weight: 150),
+              WorkoutSet(id: 4, targetReps: 5, actualReps: 0, weight: 175),
+              WorkoutSet(id: 5, targetReps: 5, actualReps: 0, weight: 200),
+            ])),
+            ExercisePanel(workout: Workout(id: 1, name: 'Barbell Row', sets: [
+              WorkoutSet(id: 1, targetReps: 5, actualReps: 0, weight: 100),
+              WorkoutSet(id: 2, targetReps: 5, actualReps: 0, weight: 125),
+              WorkoutSet(id: 3, targetReps: 5, actualReps: 0, weight: 150),
+              WorkoutSet(id: 4, targetReps: 5, actualReps: 0, weight: 175),
+              WorkoutSet(id: 5, targetReps: 5, actualReps: 0, weight: 200),
+            ])),
             const AboutDialogButton(),
           ],
         ),

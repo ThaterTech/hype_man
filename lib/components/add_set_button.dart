@@ -8,7 +8,7 @@ class AddSetButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    return 
+    return Column(children: [
       ElevatedButton(
         onPressed: () {
           callback();
@@ -23,6 +23,9 @@ class AddSetButton extends StatelessWidget {
           }),
         ),
         child: const Text('+'),
-      );
+      ),
+      const Text('blank', 
+        style: TextStyle(color: Colors.white),)
+      ],);
   }
 }
