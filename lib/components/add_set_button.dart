@@ -2,23 +2,22 @@ import 'package:flutter/material.dart';
 
 class AddSetButton extends StatefulWidget {
 
-  const AddSetButton({super.key});
+  AddSetButton({super.key, required this.callback});
+  VoidCallback callback;
 
   @override
   State<AddSetButton> createState() => _AddSetButtonState();
 }
 
 class _AddSetButtonState extends State<AddSetButton> {
-    void onPressed() {
-      // TODO
-    }
-
   @override
   Widget build(BuildContext context) {
     
     return 
       ElevatedButton(
-        onPressed: onPressed,
+        onPressed: () {
+          widget.callback();
+        },
         style: ButtonStyle(
           shape: MaterialStateProperty.all(const CircleBorder()),
           padding: MaterialStateProperty.all(const EdgeInsets.all(20)),

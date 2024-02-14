@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 
 class SetButton extends StatefulWidget {
 
@@ -8,21 +7,20 @@ class SetButton extends StatefulWidget {
   final int repCount;
 
   @override
-  State<SetButton> createState() => _SetButtonState(repCount);
+  State<SetButton> createState() => _SetButtonState();
 }
 
 class _SetButtonState extends State<SetButton> {
+    int initalRepCount = 0, repCount = 0;
 
-    int initalRepCount = 0;
-    int repCount = 0;
-    
-    _SetButtonState(int repCount) {
-      initalRepCount = repCount;
-      repCount = repCount;
+    @override
+    void initState() {
+      super.initState();
+      initalRepCount = widget.repCount;
+      repCount = widget.repCount;
     }
 
     void onPressed() {
-
       if (repCount == 0) {
         setState(() {
           repCount = initalRepCount;
@@ -37,7 +35,6 @@ class _SetButtonState extends State<SetButton> {
 
   @override
   Widget build(BuildContext context) {
-    
     return 
       ElevatedButton(
         onPressed: onPressed,
