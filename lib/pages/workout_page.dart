@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hype_man/components/add_set_button.dart';
+import 'package:hype_man/components/about_dialog_button.dart';
 import 'package:hype_man/components/exercise_panel.dart';
-import 'package:hype_man/components/set_button.dart';
 
 class WorkoutPage extends StatefulWidget {
 
@@ -34,6 +33,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
             const ExercisePanel(setName: 'Squat', repCount: 5, setCount: 5, setWeight: 305),
             const ExercisePanel(setName: 'Bench Press', repCount: 5, setCount: 4, setWeight: 225),
             const ExercisePanel(setName: 'Barbell Row', repCount: 5, setCount: 5, setWeight: 195),
+            const AboutDialogButton(),
           ],
         ),
       ),
