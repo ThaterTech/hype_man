@@ -3,10 +3,11 @@ import 'package:hype_man/models/workout_set.dart';
 
 class SetButton extends StatefulWidget {
 
-  const SetButton({super.key, required this.set, required this.enabled});
+  const SetButton({super.key, required this.set, required this.enabled, required this.deleteSetCallback});
 
   final WorkoutSet set;
   final bool enabled;
+  final void Function(int?) deleteSetCallback;
 
   @override
   State<SetButton> createState() => _SetButtonState();
@@ -21,6 +22,10 @@ class _SetButtonState extends State<SetButton> {
       super.initState();
       set = widget.set;
       enabled = widget.enabled;
+    }
+
+    void onLongPress() {
+      widget.deleteSetCallback(set?.id);
     }
 
     void onPressed() {
@@ -40,9 +45,10 @@ class _SetButtonState extends State<SetButton> {
     return Column(children: [
       ElevatedButton(
         onPressed: !enabled ? null : onPressed,
+        onLongPress: !enabled ? null : onLongPress,
         style: ButtonStyle(
           shape: MaterialStateProperty.all(const CircleBorder()),
-          padding: MaterialStateProperty.all(const EdgeInsets.all(20)),
+          padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
           backgroundColor: MaterialStateProperty.all(
             enabled ? Colors.white : Colors.white10),
           overlayColor: MaterialStateProperty.resolveWith<Color?>((states) {

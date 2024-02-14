@@ -57,10 +57,19 @@ class _ExercisePanelState extends State<ExercisePanel> {
     ];
   }
 
+  void deleteSetCallback(int? id) {
+    if (id == null) {
+      return;
+    }
+    setState(() {
+      sets.removeWhere((element) => element.id == id);
+    });
+  }
+
   List<Widget> _createChildren() {
     List<Widget> list = <Widget>[
       for(var set in sets ) 
-        SetButton(set: set, enabled: true)
+        SetButton(set: set, enabled: true, deleteSetCallback: deleteSetCallback,)
     ];
 
     list.add(AddSetButton(callback: addSetCallback));
