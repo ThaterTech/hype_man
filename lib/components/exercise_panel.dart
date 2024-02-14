@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hype_man/components/add_set_button.dart';
 import 'package:hype_man/components/set_button.dart';
 
