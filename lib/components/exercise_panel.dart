@@ -18,6 +18,7 @@ class ExercisePanel extends StatefulWidget {
 
 class _ExercisePanelState extends State<ExercisePanel> {
   String setName = '';
+  int currentSetIndex = 0;
   List<WorkoutSet> sets = [];
   List<Widget> setList = [];
   
@@ -46,6 +47,16 @@ class _ExercisePanelState extends State<ExercisePanel> {
     });
   }
 
+  List<Widget> _createHeader() {
+    WorkoutSet currentSet = sets.elementAt(currentSetIndex);
+    String nextSetSummary = '${currentSet.targetReps}x${currentSet.weight}';
+
+    return <Widget>[
+      Text(setName),
+      Text(nextSetSummary),
+    ];
+  }
+
   List<Widget> _createChildren() {
     List<Widget> list = <Widget>[
       for(var set in sets ) 
@@ -60,7 +71,16 @@ class _ExercisePanelState extends State<ExercisePanel> {
   Widget build(BuildContext context) {    
     return Column(
       children: <Widget>[
-        Text(setName),
+        SizedBox(
+          height:50,
+          child: Padding(
+            padding: const EdgeInsets.all(10), 
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: _createHeader(),
+            ),
+          ),
+        ),
         SizedBox(
           height: 100,
           child: ListView(
