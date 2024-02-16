@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hype_man/components/about_dialog_button.dart';
 import 'package:hype_man/components/exercise_panel.dart';
+import 'package:hype_man/models/workout.dart';
 
 class WorkoutPage extends StatefulWidget {
 
@@ -13,6 +14,32 @@ class WorkoutPage extends StatefulWidget {
 }
 
 class _WorkoutPageState extends State<WorkoutPage> {
+
+  Workout workout = buildWorkoutExample();
+
+  void _activeCallback(int index) {
+    if (workout.exercises[index].isComplete() && index != workout.exercises.length - 1) {
+      index++;
+    }
+
+    setState(() {
+      workout.lastExercise = index;
+    });
+  }
+
+  List<Widget> _buildWorkouts(Workout workout) {
+    int currentWorkout = workout.getCurrentExercise();
+    List<Widget> list = [
+      for (var i = 0; i < workout.exercises.length; i++)
+        ExercisePanel(
+          index: i,
+          exercise: workout.exercises[i], 
+          activePanel: i == currentWorkout, 
+          activeCallback: _activeCallback)
+    ];
+      
+    return list;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +57,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
             Text(
               'Workout Id: $id',
             ),
-            const ExercisePanel(setName: 'Squat', repCount: 5, setCount: 5, setWeight: 305),
-            const ExercisePanel(setName: 'Bench Press', repCount: 5, setCount: 4, setWeight: 225),
-            const ExercisePanel(setName: 'Barbell Row', repCount: 5, setCount: 5, setWeight: 195),
+            ..._buildWorkouts(workout),
             const AboutDialogButton(),
           ],
         ),

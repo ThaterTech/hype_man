@@ -8,14 +8,14 @@ class AddSetButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    return 
+    return Column(children: [
       ElevatedButton(
         onPressed: () {
           callback();
         },
         style: ButtonStyle(
           shape: MaterialStateProperty.all(const CircleBorder()),
-          padding: MaterialStateProperty.all(const EdgeInsets.all(20)),
+          padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
           backgroundColor: MaterialStateProperty.all(Colors.white),
           overlayColor: MaterialStateProperty.resolveWith<Color?>((states) {
             if (states.contains(MaterialState.pressed)) return Colors.redAccent;
@@ -23,6 +23,9 @@ class AddSetButton extends StatelessWidget {
           }),
         ),
         child: const Text('+'),
-      );
+      ),
+      const Text('blank', 
+        style: TextStyle(color: Colors.white),)
+      ],);
   }
 }

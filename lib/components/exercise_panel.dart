@@ -1,54 +1,93 @@
 import 'package:flutter/material.dart';
 import 'package:hype_man/components/add_set_button.dart';
 import 'package:hype_man/components/set_button.dart';
+import 'package:hype_man/models/exercise.dart';
+import 'package:hype_man/models/exercise_set.dart';
 
 class ExercisePanel extends StatefulWidget {
 
   const ExercisePanel({super.key, 
-    required this.setName,
-    required this.repCount,
-    required this.setCount,
-    required this.setWeight,
+    required this.index,
+    required this.exercise,
+    required this.activePanel,
+    required this.activeCallback,
   });
 
-  final String setName;
-  final int repCount;
-  final int setCount;
-  final int setWeight;
+  final int index;
+  final Exercise exercise;
+  final bool activePanel;
+  final void Function(int) activeCallback;
 
   @override
   State<ExercisePanel> createState() => _ExercisePanelState();
 }
 
 class _ExercisePanelState extends State<ExercisePanel> {
-  bool loading = true;
-  String setName = '';
-  int repCount = 0, setCount = 0, setWeight = 0;
+  int currentSetIndex = 0;
+  late Exercise exercise;
+  bool activePanel = false;
   List<Widget> setList = [];
+  late Function(int) activeCallback;
   
   @override
   void initState() {
     super.initState();
-    setName = widget.setName;
-    repCount = widget.repCount;
-    setCount = widget.setCount;
-    setWeight = widget.setWeight;
+    exercise = widget.exercise;
+    activeCallback = widget.activeCallback;
   }
-
+  
   void onPressed() {
+
   }
 
-  void addSetCallback() {
+  // Clones the last set, and add to the end
+  void _addSetCallback() {
+    ExerciseSet lastSet = exercise.sets.last;
+    ExerciseSet newSet = ExerciseSet(
+      id: lastSet.id + 1,
+      targetReps: lastSet.targetReps,
+      weight: lastSet.weight
+    );
+
     setState(() {
-      setCount++;
+      exercise.sets.add(newSet);
+    });
+  }
+
+  List<Widget> _createHeader() {
+    ExerciseSet currentSet = exercise.sets.elementAt(currentSetIndex);
+    String nextSetSummary = '${currentSet.targetReps}x${currentSet.weight}';
+
+    return <Widget>[
+      Text(exercise.name),
+      Text(nextSetSummary),
+    ];
+  }
+
+  void _activeSetCallback() {
+    widget.activeCallback(widget.index);
+  }
+
+  void _deleteSetCallback(int? id) {
+    if (id == null) {
+      return;
+    }
+    setState(() {
+      exercise.sets.removeWhere((element) => element.id == id);
     });
   }
 
   List<Widget> _createChildren() {
-    List<Widget> list = List<Widget>.generate(setCount, (int index) {
-      return SetButton(repCount: repCount);
-    });
-    list.add(AddSetButton(callback: addSetCallback));
+    List<Widget> list = <Widget>[
+      for(var i = 0; i < widget.exercise.sets.length; i++)
+        SetButton(set: widget.exercise.sets[i], 
+          active: widget.activePanel && widget.exercise.getNextSet() == i,
+          actionSetCallback: _activeSetCallback,
+          deleteSetCallback: _deleteSetCallback,
+        )
+    ];
+
+    list.add(AddSetButton(callback: _addSetCallback));
     return list;
   }
 
@@ -56,7 +95,16 @@ class _ExercisePanelState extends State<ExercisePanel> {
   Widget build(BuildContext context) {    
     return Column(
       children: <Widget>[
-        Text(widget.setName),
+        SizedBox(
+          height: 50,
+          child: Padding(
+            padding: const EdgeInsets.all(10), 
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: _createHeader(),
+            ),
+          ),
+        ),
         SizedBox(
           height: 100,
           child: ListView(
