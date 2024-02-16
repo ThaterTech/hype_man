@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:hype_man/models/workout_set.dart';
+import 'package:hype_man/models/exercise_set.dart';
 
 class SetButton extends StatefulWidget {
 
-  const SetButton({super.key, required this.set, required this.enabled, required this.deleteSetCallback});
+  const SetButton({super.key, 
+    required this.set, 
+    required this.active, 
+    required this.actionSetCallback, 
+    required this.deleteSetCallback});
 
-  final WorkoutSet set;
-  final bool enabled;
+  final ExerciseSet set;
+  final bool active;
+  final VoidCallback actionSetCallback;
   final void Function(int?) deleteSetCallback;
 
   @override
@@ -14,14 +19,15 @@ class SetButton extends StatefulWidget {
 }
 
 class _SetButtonState extends State<SetButton> {
-    WorkoutSet? set;
-    bool enabled = false;
+    ExerciseSet? set;
+    bool active = false;
+    bool started = false;
 
     @override
     void initState() {
       super.initState();
       set = widget.set;
-      enabled = widget.enabled;
+      started = widget.set.actualReps != null;
     }
 
     void onLongPress() {
@@ -29,38 +35,43 @@ class _SetButtonState extends State<SetButton> {
     }
 
     void onPressed() {
-      if (set?.actualReps == 0) {
+      widget.actionSetCallback();
+
+      if (widget.set.actualReps == null || widget.set.actualReps == 0) {
         setState(() {
-          set?.actualReps = set?.targetReps ?? 0;
+          widget.set.actualReps = widget.set.targetReps;
+          started = true;
         });
-      } else {
-        setState(() {
-          set?.actualReps--;
-        });
+        return;
       }
+      setState(() {
+        widget.set.actualReps = widget.set.actualReps! - 1;
+        started = true;
+      });
     }
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       ElevatedButton(
-        onPressed: !enabled ? null : onPressed,
-        onLongPress: !enabled ? null : onLongPress,
+        onPressed: onPressed,
+        onLongPress: onLongPress,
         style: ButtonStyle(
           shape: MaterialStateProperty.all(const CircleBorder()),
           padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
           backgroundColor: MaterialStateProperty.all(
-            enabled ? Colors.white : Colors.white10),
+            widget.active ? Colors.red :
+            started ? Colors.white10 : 
+            Colors.white),
           overlayColor: MaterialStateProperty.resolveWith<Color?>((states) {
-            if (!enabled) return null;
             if (states.contains(MaterialState.pressed)) return Colors.redAccent;
             return null;
           }),
         ),
-        child: Text('${set?.actualReps}'),
+        child: Text('${widget.set.actualReps ?? widget.set.targetReps}'),
       ),
       Text(
-        '${set?.weight}',
+        '${widget.set.weight}',
         style: const TextStyle(
           color: Colors.grey
         ),)

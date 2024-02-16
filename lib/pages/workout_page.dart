@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hype_man/components/about_dialog_button.dart';
 import 'package:hype_man/components/exercise_panel.dart';
 import 'package:hype_man/models/workout.dart';
-import 'package:hype_man/models/workout_set.dart';
 
 class WorkoutPage extends StatefulWidget {
 
@@ -15,6 +14,32 @@ class WorkoutPage extends StatefulWidget {
 }
 
 class _WorkoutPageState extends State<WorkoutPage> {
+
+  Workout workout = buildWorkoutExample();
+
+  void _activeCallback(int index) {
+    if (workout.exercises[index].isComplete() && index != workout.exercises.length - 1) {
+      index++;
+    }
+
+    setState(() {
+      workout.lastExercise = index;
+    });
+  }
+
+  List<Widget> _buildWorkouts(Workout workout) {
+    int currentWorkout = workout.getCurrentExercise();
+    List<Widget> list = [
+      for (var i = 0; i < workout.exercises.length; i++)
+        ExercisePanel(
+          index: i,
+          exercise: workout.exercises[i], 
+          activePanel: i == currentWorkout, 
+          activeCallback: _activeCallback)
+    ];
+      
+    return list;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,27 +57,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
             Text(
               'Workout Id: $id',
             ),
-            ExercisePanel(workout: Workout(id: 1, name: 'Squat', sets: [
-              WorkoutSet(id: 1, targetReps: 5, actualReps: 0, weight: 100),
-              WorkoutSet(id: 2, targetReps: 5, actualReps: 0, weight: 125),
-              WorkoutSet(id: 3, targetReps: 5, actualReps: 0, weight: 150),
-              WorkoutSet(id: 4, targetReps: 5, actualReps: 0, weight: 175),
-              WorkoutSet(id: 5, targetReps: 5, actualReps: 0, weight: 200),
-            ])),
-            ExercisePanel(workout: Workout(id: 1, name: 'Bench', sets: [
-              WorkoutSet(id: 1, targetReps: 5, actualReps: 0, weight: 100),
-              WorkoutSet(id: 2, targetReps: 5, actualReps: 0, weight: 125),
-              WorkoutSet(id: 3, targetReps: 5, actualReps: 0, weight: 150),
-              WorkoutSet(id: 4, targetReps: 5, actualReps: 0, weight: 175),
-              WorkoutSet(id: 5, targetReps: 5, actualReps: 0, weight: 200),
-            ])),
-            ExercisePanel(workout: Workout(id: 1, name: 'Barbell Row', sets: [
-              WorkoutSet(id: 1, targetReps: 5, actualReps: 0, weight: 100),
-              WorkoutSet(id: 2, targetReps: 5, actualReps: 0, weight: 125),
-              WorkoutSet(id: 3, targetReps: 5, actualReps: 0, weight: 150),
-              WorkoutSet(id: 4, targetReps: 5, actualReps: 0, weight: 175),
-              WorkoutSet(id: 5, targetReps: 5, actualReps: 0, weight: 200),
-            ])),
+            ..._buildWorkouts(workout),
             const AboutDialogButton(),
           ],
         ),
