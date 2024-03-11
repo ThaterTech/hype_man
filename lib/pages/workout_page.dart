@@ -3,6 +3,8 @@ import 'package:hype_man/components/about_dialog_button.dart';
 import 'package:hype_man/components/exercise_panel.dart';
 import 'package:hype_man/models/workout.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class WorkoutPage extends StatefulWidget {
 
   const WorkoutPage({super.key, required this.id});
@@ -54,9 +56,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Workout Id: $id',
-            ),
+            Text(AppLocalizations.of(context)!.workout_page__title('$id')),
             ..._buildWorkouts(workout),
             const AboutDialogButton(),
           ],
