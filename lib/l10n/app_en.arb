@@ -1,0 +1,16 @@
+{
+    "title": "Hype Man",
+    "@title": {
+        "description": "Title for the application."
+    },
+    "workout_page__title": "Workout {id}",
+    "@workout_page__title": {
+        "description": "Title for the workout page.",
+        "placeholders": {
+            "id": {
+                "type": "String",
+                "example": "1"
+            }
+        }
+    }
+}
