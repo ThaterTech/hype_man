@@ -30,8 +30,55 @@ class _SetButtonState extends State<SetButton> {
       started = widget.set.actualReps != null;
     }
 
-    void onLongPress() {
+    void handleUpdate(int i) {
+      setState(() {
+        widget.set.actualReps = i;
+        started = true;
+      });
+      widget.actionSetCallback();
+      Navigator.pop(context);
+    }
+
+    void handleDelete() {
       widget.deleteSetCallback(set?.id);
+      Navigator.pop(context);
+    }
+
+    List<Widget> buildButtonsForEditModal() {
+      List<Widget> list = <Widget>[
+        for(var i = 0; i <= widget.set.targetReps; i++)
+          ElevatedButton(
+            child: Text('$i'),
+            onPressed: () => handleUpdate(i)
+          )
+      ];
+      return list;
+    }
+
+    void onLongPress() {
+      showModalBottomSheet<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: 200,
+            child: SingleChildScrollView(child:
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    ...buildButtonsForEditModal(),
+                    ElevatedButton(
+                      child: const Text('Delete Set'),
+                      onPressed: () => handleDelete()
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+      );
     }
 
     void onPressed() {
